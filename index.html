@@ -1,0 +1,97 @@
+<head>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready (function(){
+    //Добавление задачи
+    $("#new").on("keyup" , function(event){
+      var text =  $("#new").val();
+      if (event.keyCode == 13){
+        if (text == "")
+            alert ("Введите название задачи");
+        else{
+          $("#tusks").append(getItemHtml(text));
+          $("#new").val('');
+        }
+      }
+    });
+    //Шаблон элемента
+    function getItemHtml(val) {
+  			return '<div class = "item">'
+        +'<div><input type="checkbox" class="checkbox"></div>'
+        +'<div><div class = "name">'+val+'</div>'
+        +'<input type="text" class="editInput" value="'+val+'"></div>'
+        +'<div class="btnBlock"><input type="button" class = "btn" value = "X"></div>'
+        +'</div>';
+		  };
+    //Завершение задачи
+    $("#tusks").on("click", "input.checkbox" , function (event){
+      var e = event.target;
+      e.closest(".item").classList.add("complete");
+      e.remove();
+    });
+    //Удаление задачи
+    $("#tusks").on("click", "input.btn",function(event){
+      event.target.closest(".item").remove();
+    });
+    //Редактирование задачи
+    //Начало редактировния задачи
+    $("#tusks").on("dblclick", "div.name",function(event){
+      var item = event.target.closest(".item");
+      if (!item.classList.contains("complete"))
+        item.classList.add("edit");
+    });
+    //Конец редактирования
+    $("#tusks").on("focusout","input.editInput", function(event){
+      var item = event.target.closest(".item");
+      item.classList.remove("edit");
+      item.querySelector('.name').innerHTML = event.target.value;
+
+    });
+});
+</script>
+<style>
+*{
+  margin: 0;
+  padding: 0;
+}
+body{
+  width: 100%;
+}
+#tusks{
+  margin-top: 2%;
+}
+.item {
+  width : 80%;
+  margin-left: 10%;
+  margin-top: 0.3%;
+  border : solid black 1px;
+}
+.item div{
+  margin-left: 2%;
+  width:30%;
+  display: inline-block;
+  text-align: center;
+}
+.complete div.name{
+    text-decoration: line-through;
+}
+.edit input.editInput{
+    display: inline-block;
+}
+.edit div.name{
+    display: none;
+}
+.editInput {
+    display: none;
+}
+#new{
+  margin-left: 40%;
+  width: 20%;
+}
+</style>
+</head>
+<body>
+  <input type="text" id="new" placeholder="Новая задача">
+  <div id="tusks">
+  </div>
+</body>
